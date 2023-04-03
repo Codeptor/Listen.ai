@@ -1,7 +1,36 @@
-const express = require("express");
+// app.js
+
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const moodRoutes = require('./routes/mood');
+const authRoutes = require('./routes/auth');
+
 const app = express();
-const port = 8080;
 
-app.get("/", (req, res) => res.send("Hello World!"));
+// Middlewares
+app.use(bodyParser.json());
+app.use(cors());
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// Routes
+app.use('/api/mood', moodRoutes);
+app.use('/api/auth', authRoutes);
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false
+}).then(() => {
+  console.log('Connected to MongoDB');
+}).catch((err) => {
+  console.error(err);
+});
+
+// Start server
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
