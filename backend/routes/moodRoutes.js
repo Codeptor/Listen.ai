@@ -1,4 +1,3 @@
-// routes/moodRoutes.js
 
 const express = require('express');
 const moodController = require('../controllers/moodController');
